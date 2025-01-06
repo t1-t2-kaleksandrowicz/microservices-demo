@@ -102,8 +102,14 @@ Find **Protocol Buffers Descriptions** at the [`./protos` directory](/protos).
 
 5. Deploy Online Boutique to the cluster.
 
+   **kubectl**
    ```sh
    kubectl apply -f ./release/kubernetes-manifests.yaml
+   ```
+
+   **helm**
+   ```sh
+   helm install onlineboutique ./helm-chart --set images.repository="${REGION}-docker.pkg.dev/gd-gcp-gridu-devops-t1-t2/${PREFIX}"
    ```
 
 6. Wait for the pods to be ready.
@@ -145,6 +151,7 @@ Find **Protocol Buffers Descriptions** at the [`./protos` directory](/protos).
    ```sh
    gcloud container clusters delete online-boutique \
      --project=${PROJECT_ID} --region=${REGION}
+   gcloud artifacts repositories delete "${PREFIX}" --location="${REGION}"
    ```
 
    Deleting the cluster may take a few minutes.

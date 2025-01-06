@@ -49,7 +49,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: us-central1-docker.pkg.dev/google-samples/microservices-demo/emailservice:v0.10.2
+        image: us-central1-docker.pkg.dev/gd-gcp-gridu-devops-t1-t2/kaleksandrowicz-t1-t2/emailservice:v0.10.2
         ports:
         - containerPort: 8080
         env:
@@ -123,7 +123,7 @@ spec:
                 - ALL
             privileged: false
             readOnlyRootFilesystem: true
-          image: us-central1-docker.pkg.dev/google-samples/microservices-demo/checkoutservice:v0.10.2
+          image: us-central1-docker.pkg.dev/gd-gcp-gridu-devops-t1-t2/kaleksandrowicz-t1-t2/checkoutservice:v0.10.2
           ports:
           - containerPort: 5050
           readinessProbe:
@@ -206,7 +206,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: us-central1-docker.pkg.dev/google-samples/microservices-demo/recommendationservice:v0.10.2
+        image: us-central1-docker.pkg.dev/gd-gcp-gridu-devops-t1-t2/kaleksandrowicz-t1-t2/recommendationservice:v0.10.2
         ports:
         - containerPort: 8080
         readinessProbe:
@@ -284,7 +284,7 @@ spec:
                 - ALL
             privileged: false
             readOnlyRootFilesystem: true
-          image: us-central1-docker.pkg.dev/google-samples/microservices-demo/frontend:v0.10.2
+          image: us-central1-docker.pkg.dev/gd-gcp-gridu-devops-t1-t2/kaleksandrowicz-t1-t2/frontend:v0.10.2
           ports:
           - containerPort: 8080
           readinessProbe:
@@ -411,7 +411,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: us-central1-docker.pkg.dev/google-samples/microservices-demo/paymentservice:v0.10.2
+        image: us-central1-docker.pkg.dev/gd-gcp-gridu-devops-t1-t2/kaleksandrowicz-t1-t2/paymentservice:v0.10.2
         ports:
         - containerPort: 50051
         env:
@@ -484,7 +484,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: us-central1-docker.pkg.dev/google-samples/microservices-demo/productcatalogservice:v0.10.2
+        image: us-central1-docker.pkg.dev/gd-gcp-gridu-devops-t1-t2/kaleksandrowicz-t1-t2/productcatalogservice:v0.10.2
         ports:
         - containerPort: 3550
         env:
@@ -557,7 +557,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: us-central1-docker.pkg.dev/google-samples/microservices-demo/cartservice:v0.10.2
+        image: us-central1-docker.pkg.dev/gd-gcp-gridu-devops-t1-t2/kaleksandrowicz-t1-t2/cartservice:v0.10.2
         ports:
         - containerPort: 7070
         env:
@@ -735,7 +735,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: us-central1-docker.pkg.dev/google-samples/microservices-demo/loadgenerator:v0.10.2
+        image: us-central1-docker.pkg.dev/gd-gcp-gridu-devops-t1-t2/kaleksandrowicz-t1-t2/loadgenerator:v0.10.2
         env:
         - name: FRONTEND_ADDR
           value: "frontend:80"
@@ -787,7 +787,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: us-central1-docker.pkg.dev/google-samples/microservices-demo/currencyservice:v0.10.2
+        image: us-central1-docker.pkg.dev/gd-gcp-gridu-devops-t1-t2/kaleksandrowicz-t1-t2/currencyservice:v0.10.2
         ports:
         - name: grpc
           containerPort: 7000
@@ -860,7 +860,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: us-central1-docker.pkg.dev/google-samples/microservices-demo/shippingservice:v0.10.2
+        image: us-central1-docker.pkg.dev/gd-gcp-gridu-devops-t1-t2/kaleksandrowicz-t1-t2/shippingservice:v0.10.2
         ports:
         - containerPort: 50051
         env:
@@ -934,7 +934,7 @@ spec:
               - ALL
           privileged: false
           readOnlyRootFilesystem: true
-        image: us-central1-docker.pkg.dev/google-samples/microservices-demo/adservice:v0.10.2
+        image: us-central1-docker.pkg.dev/gd-gcp-gridu-devops-t1-t2/kaleksandrowicz-t1-t2/adservice:v0.10.2
         ports:
         - containerPort: 9555
         env:
@@ -972,6 +972,19 @@ spec:
   - name: grpc
     port: 9555
     targetPort: 9555
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: adservice
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: adservice
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 50
 ---
 apiVersion: v1
 kind: ServiceAccount

@@ -62,11 +62,34 @@ Find **Protocol Buffers Descriptions** at the [`./protos` directory](/protos).
    ```sh
    export PROJECT_ID=<PROJECT_ID>
    export REGION=us-central1
-   gcloud services enable container.googleapis.com \
+   gcloud services enable container.googleapis.com artifactregistry.googleapis.com \
      --project=${PROJECT_ID}
    ```
 
    Substitute `<PROJECT_ID>` with the ID of your Google Cloud project.
+
+4. Create an Artifact registry.
+
+   ```sh
+   export PREFIX="kaleksandrowicz-t1-t2"
+   gcloud artifacts repositories create "${PREFIX}"  --repository-format=docker \
+   --location="${REGION}" --description="T1 to T2" \
+   --project="${PROJECT_ID}"
+
+   gcloud auth configure-docker "${REGION}-docker.pkg.dev"
+    ```
+
+4. Create and push image to the Artifact registry.
+
+   ```sh
+   for image in emailservice checkoutservice recommendationservice frontend paymentservice productcatalogservice cartservice loadgenerator currencyservice shippingservice adservice; do
+      OLD_IMAGE="us-central1-docker.pkg.dev/google-samples/microservices-demo/${image}:v0.10.2"
+      NEW_IMAGE="${REGION}-docker.pkg.dev/gd-gcp-gridu-devops-t1-t2/${PREFIX}/${image}:v0.10.2"
+      docker pull "${OLD_IMAGE}"
+      docker tag "${OLD_IMAGE}" "${NEW_IMAGE}"
+      docker push "${NEW_IMAGE}"
+   done
+   ```
 
 4. Create a GKE cluster and get the credentials for it.
 
